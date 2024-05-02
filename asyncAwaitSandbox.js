@@ -15,34 +15,41 @@
 
 //HTTP Requests
 
-const getTodos = (resource, callback) => {
+// const getTodos = (resource, callback) => {
 
-    return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();
+//     return new Promise((resolve, reject) => {
+//         const request = new XMLHttpRequest();
 
-        request.addEventListener('readystatechange', () => {
-            // console.log(request, request.readyState);
-            if(request.readyState === 4 && request.status === 200){
-                const data = JSON.parse(request.responseText);
-                resolve(data)
-            }
-            else if(request.readyState === 4){
-                reject('Error getting resource')
-            }
-        });
+//         request.addEventListener('readystatechange', () => {
+//             // console.log(request, request.readyState);
+//             if(request.readyState === 4 && request.status === 200){
+//                 const data = JSON.parse(request.responseText);
+//                 resolve(data)
+//             }
+//             else if(request.readyState === 4){
+//                 reject('Error getting resource')
+//             }
+//         });
         
-        //request.open('GET', 'https://jsonplaceholder.typicode.com/todos/');
-        request.open('GET', resource);
-        request.send();
-    });
+//         //request.open('GET', 'https://jsonplaceholder.typicode.com/todos/');
+//         request.open('GET', resource);
+//         request.send();
+//     });
 
-};
+// };
 
-getTodos('todos/todos.json').then(data => {
-    console.log('promise resolved', data);
-}).catch(err => {
-    console.log('promise rejected', err)
-})
+//Promise chaining
+// getTodos('todos/todos.json').then(data => {
+//     console.log('promise resolved', data);
+//     return getTodos('todos/todonts.json');
+// }).then (data => {
+//     console.log('promise 2 resolved', data)
+//     return getTodos('todos/tos.json');
+// }).then(data => {
+//     console.log('promise 3 resolved', data);
+// }).catch(err => {
+//     console.log('promise rejected', err)
+// })
 
 //Callback Hell
 // getTodos('todos/todos.json', (err, data) => {
@@ -81,3 +88,34 @@ getTodos('todos/todos.json').then(data => {
 //     console.log(err)
 // })
 
+
+//FETCH THANK YOU GOD WHY WAS XMLHTTP IN THAT TUTORIAL
+
+// fetch('todos/todos.json').then((response) =>{
+//     console.log('Resolved', response)
+//     return response.json();
+// }).then(data => {
+//     console.log(data)
+// }).catch((reject) =>{
+//     console.log('Rejected', err)
+// });
+
+
+//ASYNC AND AWAIT FINALLY
+
+const getTodos = async () => {
+
+    const response = await fetch('todos/todos.json');
+
+    if(response.status !== 200){
+        throw new Error('Cannot fetch data');
+    }
+
+    const data = await response.json();
+    return data;
+
+};
+
+getTodos()
+    .then(data => console.log('Resolved', data))
+    .catch(err => console.log('Rejected', err.message));
